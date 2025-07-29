@@ -1,20 +1,27 @@
-import { useState } from "react";
-import { portalAxios } from "@/lib/portalAxios";
 import { useAuth } from "@/hooks/use-auth";
+import { portalAxios } from "@/lib/portalAxios";
+import { useState } from "react";
 
 export function Login() {
   const { login } = useAuth();
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState<string | null>(null);
-
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+
     try {
-      const { data } = await portalAxios.post("/oauth2/token", {
-        username,
-        password,
+      const formData = new URLSearchParams();
+      formData.append("grant_type", "password");
+      formData.append("username", username);
+      formData.append("password", password);
+
+      const { data } = await portalAxios.post("/api/oauth2/v1/token", formData, {
+        headers: {
+          "Content-Type": "application/x-www-form-urlencoded",
+        },
       });
+
       const token = data.access_token as string;
       login(token, username);
     } catch {
