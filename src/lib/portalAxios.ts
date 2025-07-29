@@ -1,6 +1,10 @@
 import axios, { InternalAxiosRequestConfig } from "axios";
 
-export const portalAxios = axios.create();
+const baseURL = import.meta.env.VITE_PROTHEUS_SERVER;
+
+export const portalAxios = axios.create({
+  baseURL,
+});
 
 portalAxios.interceptors.request.use((config: InternalAxiosRequestConfig) => {
   const token = localStorage.getItem("auth-token");
