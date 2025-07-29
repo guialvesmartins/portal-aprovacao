@@ -10,11 +10,11 @@ export const Main = () => {
   return (
     <StrictMode>
       <ThemeProvider>
-        <AuthProvider>
-          <BrowserRouter basename="/fieg">
+        <BrowserRouter basename="/fieg">
+          <AuthProvider>
             <App />
-          </BrowserRouter>
-        </AuthProvider>
+          </AuthProvider>
+        </BrowserRouter>
       </ThemeProvider>
     </StrictMode>
   );

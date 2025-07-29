@@ -5,11 +5,11 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { useKeycloakStore } from "@/hooks/use-keycloak";
+import { useAuth } from "@/hooks/use-auth";
 import { User } from "lucide-react";
 
 export function UserDropdown() {
-  const { username, logout } = useKeycloakStore();
+  const { username, logout } = useAuth();
 
   return (
     <DropdownMenu>

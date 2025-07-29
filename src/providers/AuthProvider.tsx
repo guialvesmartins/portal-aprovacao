@@ -1,41 +1,51 @@
-import { keycloakConf } from "@/auth/Keycloak";
-import { initKeycloak } from "@/auth/Secured";
-import { AuthContext } from "@/context/keycloakContext";
-import { useKeycloakStore } from "@/hooks/use-keycloak";
+import { AuthContext } from "@/context/authContext";
 import { useEffect, useState } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
 
 export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
-  const { isAuthenticated, login, logout } = useKeycloakStore();
-  const [loading, setLoading] = useState(true);
+  const [token, setToken] = useState<string | null>(null);
+  const [username, setUsername] = useState<string | null>(null);
+  const navigate = useNavigate();
+  const location = useLocation();
 
   useEffect(() => {
-    initKeycloak()
-      .then((authenticated) => {
-        if (authenticated && keycloakConf.token) {
-          login(keycloakConf.token.toString(), keycloakConf.tokenParsed?.name || "");
-        }
-        setTimeout(() => setLoading(false), 1000); // Aguarda 3 segundos antes de remover o loading
-      })
-      .catch(() => setTimeout(() => setLoading(false), 1000));
-  }, [login]);
+    const storedToken = localStorage.getItem("auth-token");
+    const storedUser = localStorage.getItem("auth-user");
+    if (storedToken) {
+      setToken(storedToken);
+      setUsername(storedUser);
+    } else if (location.pathname !== "/login") {
+      navigate("/login");
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
-  if (loading)
-    return (
-      <div className="flex items-center justify-center h-screen w-screen flex-col space-y-4">
-        <div
-          className="inline-block h-16 w-16 animate-spin rounded-full border-6 border-solid border-current border-r-transparent align-[-0.125em] text-primary motion-reduce:animate-[spin_1.5s_linear_infinite]"
-          role="status"
-        >
-          <span className="!absolute !-m-px !h-px !w-px !overflow-hidden !whitespace-nowrap !border-0 !p-0 ![clip:rect(0,0,0,0)]">
-            Loading...
-          </span>
-        </div>
-        <span className="text-primary font-semibold">Carregando os dados!</span>
-      </div>
-    );
+  useEffect(() => {
+    if (!token && location.pathname !== "/login") {
+      navigate("/login");
+    }
+  }, [token, location.pathname, navigate]);
+
+  const login = (tok: string, user: string) => {
+    setToken(tok);
+    setUsername(user);
+    localStorage.setItem("auth-token", tok);
+    localStorage.setItem("auth-user", user);
+    navigate("/");
+  };
+
+  const logout = () => {
+    setToken(null);
+    setUsername(null);
+    localStorage.removeItem("auth-token");
+    localStorage.removeItem("auth-user");
+    navigate("/login");
+  };
 
   return (
-    <AuthContext.Provider value={{ isAuthenticated, username: login.name, logout }}>
+    <AuthContext.Provider
+      value={{ isAuthenticated: !!token, username, token, login, logout }}
+    >
       {children}
     </AuthContext.Provider>
   );
