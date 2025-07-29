@@ -1,15 +1,14 @@
-import axios from "axios";
+import axios, { InternalAxiosRequestConfig } from "axios";
 
 export const portalAxios = axios.create();
 
-portalAxios.interceptors.request.use((config) => {
+portalAxios.interceptors.request.use((config: InternalAxiosRequestConfig) => {
   const token = localStorage.getItem("auth-token");
+
   if (token) {
-    config.headers = {
-      ...(config.headers as any),
-      Authorization: `Bearer ${token}`,
-    } as any;
+    config.headers.set("Authorization", `Bearer ${token}`);
   }
+
   return config;
 });
 
