@@ -8,5 +8,5 @@ export interface LinkItemProps {
 
 export const MenuList: Array<LinkItemProps> = [
   { to: "/", icon: House, label: "Home" },
-  { to: "/pagamentos", icon: DollarSign, label: "Pagamentos" },
+  { to: "/solicitacoes", icon: DollarSign, label: "Solicitações de Compra" },
 ];
