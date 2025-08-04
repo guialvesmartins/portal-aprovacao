@@ -2,10 +2,9 @@ import { cn } from "@/lib/utils";
 
 type Props = {
   title: string;
-  classname?: string;
+  className?: string;
 };
 
-export default function PageTitle({ title, classname }: Props) {
-  return <h1 className={cn("text-2xl font-semibold text-foreground mb-2", classname)}>{title}</h1>;
+export default function PageTitle({ title, className }: Props) {
+  return <h1 className={cn("text-2xl font-semibold text-foreground mb-2", className)}>{title}</h1>;
 }
-

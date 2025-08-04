@@ -1,3 +1,4 @@
+import { Fragment } from "react";
 import useBreadcrumbs from "use-react-router-breadcrumbs";
 import { MenuList } from "./MenuList";
 import {
@@ -9,10 +10,10 @@ import {
 } from "./ui/breadcrumb";
 
 type Props = {
-  classname?: string;
+  className?: string;
 };
 
-export default function BreadcrumbNav({ classname }: Props) {
+export default function BreadcrumbNav({ className }: Props) {
   const breadcrumbs = useBreadcrumbs();
 
   function buscarNomeRota(rota: string) {
@@ -20,25 +21,25 @@ export default function BreadcrumbNav({ classname }: Props) {
   }
 
   return (
-    <div className={`mt-4 ml-4 text-accent-foreground ${classname}`.trim()}>
+    <div className={["mt-4 ml-4 text-accent-foreground", className].filter(Boolean).join(" ")}>
       <Breadcrumb>
         <BreadcrumbList>
           <BreadcrumbItem>
-            <BreadcrumbLink to="/dashboard" className="text-accent-foreground  cursor-pointer">
-              Fieg
+            <BreadcrumbLink to="/" className="text-accent-foreground cursor-pointer">
+              Home
             </BreadcrumbLink>
           </BreadcrumbItem>
           {breadcrumbs.map((breadcrumb) => {
             const rota = buscarNomeRota(breadcrumb.match.pathname);
             return rota ? (
-              <>
-                <BreadcrumbSeparator className="text-accent-foreground " />
-                <BreadcrumbItem key={breadcrumb.key}>
+              <Fragment key={breadcrumb.key}>
+                <BreadcrumbSeparator className="text-accent-foreground" />
+                <BreadcrumbItem>
                   <BreadcrumbLink to={rota.to} className="text-accent-foreground cursor-pointer">
                     {rota.label}
                   </BreadcrumbLink>
                 </BreadcrumbItem>
-              </>
+              </Fragment>
             ) : null;
           })}
         </BreadcrumbList>
