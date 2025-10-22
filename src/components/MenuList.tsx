@@ -1,4 +1,11 @@
-import { DollarSign, House, LucideIcon } from "lucide-react";
+import {
+  AlertTriangle,
+  ClipboardList,
+  FileMinus2,
+  FileText,
+  House,
+  LucideIcon,
+} from "lucide-react";
 
 export interface LinkItemProps {
   to: string;
@@ -8,5 +15,8 @@ export interface LinkItemProps {
 
 export const MenuList: Array<LinkItemProps> = [
   { to: "/", icon: House, label: "Home" },
-  { to: "/pagamentos", icon: DollarSign, label: "Pagamentos" },
+  { to: "/solicitacoes", icon: ClipboardList, label: "Solicitações de Compra" },
+  { to: "/pedidos", icon: FileText, label: "Pedidos de Compra" },
+  { to: "/titulos", icon: FileMinus2, label: "Títulos a Pagar" },
+  { to: "/contingencia", icon: AlertTriangle, label: "Contingência" },
 ];

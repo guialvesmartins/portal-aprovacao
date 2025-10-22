@@ -9,8 +9,9 @@ export const portalAxios = axios.create({
 portalAxios.interceptors.request.use((config: InternalAxiosRequestConfig) => {
   const token = localStorage.getItem("auth-token");
 
-  if (token) {
-    config.headers.set("Authorization", `Bearer ${token}`);
+  if (token && config.headers) {
+    // Ensure Authorization header is set correctly
+    (config.headers as Record<string, string>)["Authorization"] = `Bearer ${token}`;
   }
 
   return config;
